@@ -1,66 +1,52 @@
+import { Field, ObjectType } from '@nestjs/graphql';
 import { ApiProperty } from '@nestjs/swagger';
+import { CategoryResponse } from 'src/category/dto';
+import { VariantResponse } from 'src/variant/dto';
 
+@ObjectType()
 export class ProductResponse {
+  @Field(() => String)
   @ApiProperty({ description: 'Unique identifier for the certification' })
   name: string;
 
+  @Field(() => String)
   @ApiProperty({ description: 'Unique identifier for the certification' })
   description: string;
 
+  // @Field(() => Object)
   @ApiProperty({ description: 'Unique identifier for the certification' })
   store: {
     id: string;
     name: string;
   };
 
+  @Field(() => CategoryResponse)
   @ApiProperty({
-    type: Object,
+    type: CategoryResponse,
     description: 'Unique identifier for the certification',
-    example: {
-      id: 'category_id',
-      name: 'category_name',
-    },
   })
-  category: {
-    id: string;
-    name: string;
-  };
+  category: CategoryResponse;
 
+  @Field(() => Date)
   @ApiProperty({ description: 'Unique identifier for the certification' })
   deleted_at?: Date;
 
+  @Field(() => Date)
   @ApiProperty({ description: 'Unique identifier for the certification' })
   created_at: Date;
 
+  @Field(() => Date)
   @ApiProperty({ description: 'Unique identifier for the certification' })
   updated_at: Date;
 
+  @Field(() => [String])
   @ApiProperty({ description: 'Unique identifier for the certification' })
   tags: string[];
 
+  @Field(() => [VariantResponse])
   @ApiProperty({
-    type: Array,
-    description: 'Unique identifier for the certification',
-    example: [
-      {
-        id: 'variant_id',
-        product_id: 'product_id',
-        sku: 'sku',
-        price: 100000,
-        attributes: { size: 'M', colour: 'red' },
-      },
-    ],
+    type: [VariantResponse],
+    description: 'An Array of Variants for the product',
   })
-  variants: {
-    id: string;
-    sku: string;
-    price: string;
-    stock: string;
-    attributes: {
-      attributeName: string;
-    };
-    created_at: Date;
-    updated_at: Date;
-    deleted_at: Date;
-  }[];
+  variants: VariantResponse[];
 }

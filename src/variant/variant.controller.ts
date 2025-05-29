@@ -17,8 +17,8 @@ export class VariantController {
 
   @ApiOkResponse({ type: VariantResponse })
   @Put('create')
-  createVariant(@Body() data: CreateVariantInput) {
-    return this.variantService.createVariant(data);
+  createVariant(@Param('id') id: string, @Body() data: CreateVariantInput) {
+    return this.variantService.createVariant(id, data);
   }
 
   @ApiOkResponse({ type: [VariantResponse] })

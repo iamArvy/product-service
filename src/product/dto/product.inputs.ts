@@ -1,12 +1,7 @@
 import { Field, InputType, PartialType } from '@nestjs/graphql';
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  IsArray,
-  IsInt,
-  IsNotEmpty,
-  IsObject,
-  IsString,
-} from 'class-validator';
+import { IsArray, IsNotEmpty, IsString } from 'class-validator';
+import { CreateVariantInput } from 'src/variant/dto';
 
 @InputType()
 export class CreateProductInput {
@@ -34,25 +29,11 @@ export class CreateProductInput {
   @Field(() => [String])
   tags: string[];
 
-  @ApiProperty({ description: 'Name of the product' })
-  @IsString()
+  @IsArray()
   @IsNotEmpty()
-  sku: string;
-
-  @ApiProperty({ description: 'Name of the product' })
-  @IsInt()
-  @IsNotEmpty()
-  price: number;
-
-  @ApiProperty({ description: 'Name of the product' })
-  @IsInt()
-  @IsNotEmpty()
-  stock: number;
-
-  @ApiProperty({ description: 'Name of the product' })
-  @IsObject()
-  @IsNotEmpty()
-  attributes: Record<string, string>;
+  @Field(() => [CreateVariantInput])
+  @ApiProperty({ type: CreateVariantInput, description: 'Name of the product' })
+  variant: CreateVariantInput;
 }
 
 @InputType()

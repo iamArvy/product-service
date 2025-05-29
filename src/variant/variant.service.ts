@@ -6,8 +6,24 @@ import { CreateVariantInput, UpdateVariantInput } from './dto';
 export class VariantService {
   constructor(private prisma: PrismaService) {}
 
-  createVariant(data: CreateVariantInput) {
-    return this.prisma.variant.create({ data });
+  createVariant(product_id: string, data: CreateVariantInput) {
+    const { sku, price, stock, attributes } = data;
+    return this.prisma.variant.create({
+      data: {
+        product_id,
+        sku,
+        price,
+        stock,
+        attributes: {
+          createMany: {
+            data: attributes.map((attr) => ({
+              key: attr.key,
+              value: attr.value,
+            })),
+          },
+        },
+      },
+    });
   }
 
   async getVariants() {
@@ -19,7 +35,15 @@ export class VariantService {
   }
 
   async updateVariant(id: string, data: UpdateVariantInput) {
-    return await this.prisma.variant.update({ where: { id }, data });
+    const { sku, price, stock } = data;
+    return await this.prisma.variant.update({
+      where: { id },
+      data: {
+        sku,
+        price,
+        stock,
+      },
+    });
   }
 
   async deleteVariant(id: string) {

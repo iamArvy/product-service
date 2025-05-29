@@ -1,13 +1,24 @@
-import { Body, Controller, Get, Param, Patch, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Put,
+  UseGuards,
+} from '@nestjs/common';
 import { ProductService } from './product.service';
 import { CreateProductInput, UpdateProductInput } from './dto/product.inputs';
 import { ApiBody, ApiOkResponse } from '@nestjs/swagger';
 import { ProductResponse } from './dto/product.response';
+import { RestAuthGuard } from 'src/guards';
 
 @Controller('product')
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
+  @UseGuards(RestAuthGuard)
   @ApiOkResponse({
     description: 'Created Product',
     type: ProductResponse,
@@ -33,14 +44,16 @@ export class ProductController {
     return this.productService.getProductsByCategory(id);
   }
 
+  @UseGuards(RestAuthGuard)
   @ApiBody({ type: CreateProductInput })
   @Patch('update/:id')
-  updateProduct(
-    @Param('id') id: string,
-    @Body('data') data: UpdateProductInput,
-  ) {
+  updateProduct(@Param('id') id: string, @Body() data: UpdateProductInput) {
     return this.productService.updateProduct(id, data);
   }
 
-  deleteProduct() {}
+  @UseGuards(RestAuthGuard)
+  @Delete(':id/delete')
+  deleteProduct(@Param('id') id: string) {
+    return this.productService.deleteProduct(id);
+  }
 }

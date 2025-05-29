@@ -21,7 +21,11 @@ export class ProductService {
     const product = await this.prisma.product.findUnique({
       where: { id },
       include: {
-        variants: true,
+        variants: {
+          include: {
+            attributes: true,
+          },
+        },
         category: true,
       },
     });
@@ -49,16 +53,8 @@ export class ProductService {
   }
 
   async createProduct(store_id: string, data: CreateProductInput) {
-    const {
-      name,
-      description,
-      category_id,
-      tags,
-      sku,
-      stock,
-      price,
-      attributes,
-    } = data;
+    const { name, description, category_id, tags, variant } = data;
+    const { sku, stock, price, attributes } = variant;
     const product = await this.prisma.product.create({
       data: {
         name,
@@ -68,14 +64,22 @@ export class ProductService {
         tags,
         variants: {
           create: {
-            sku,
-            stock,
-            price,
-            attributes,
+            sku: sku,
+            stock: stock,
+            price: price,
+            attributes: {
+              createMany: {
+                data: attributes.map((attr) => ({
+                  key: attr.key,
+                  value: attr.value,
+                })),
+              },
+            },
           },
         },
       },
     });
+
     const cacheKey = `product:${product.id}`;
 
     await this.cacheManager.set(cacheKey, product, 60 * 1000); // 1 min TTL

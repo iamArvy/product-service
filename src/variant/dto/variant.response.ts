@@ -1,6 +1,8 @@
-import { Field, Int } from '@nestjs/graphql';
+import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { ApiProperty } from '@nestjs/swagger';
+import { AttributeResponse } from 'src/attribute/dto';
 
+@ObjectType()
 export class VariantResponse {
   @ApiProperty({
     type: String,
@@ -45,12 +47,13 @@ export class VariantResponse {
   @ApiProperty({
     type: Object,
     description: 'Attributes of the variant',
-    example: { size: 'M', color: 'red' },
+    example: [
+      { key: 'size', value: 'M' },
+      { key: 'color', value: 'Red' },
+    ],
   })
-  @Field(() => Object)
-  attributes: {
-    attributeName: string;
-  };
+  @Field(() => [AttributeResponse])
+  attributes: AttributeResponse[];
 
   @ApiProperty({
     type: Date,
