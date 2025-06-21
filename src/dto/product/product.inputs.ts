@@ -27,6 +27,6 @@ export class PartialProductInput extends PartialType(ProductInput) {}
 export class ListProductInput extends ListInput<OrderInput> {}
 export class ListProductByRelationInput {
   id: string;
-  data: ListProductInput;
+  params: ListProductInput;
 }
 export class UpdateProductInput extends UpdateInput<PartialProductInput> {}

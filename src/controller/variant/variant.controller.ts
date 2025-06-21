@@ -24,7 +24,7 @@ export class VariantController {
   }
 
   @GrpcMethod('ProductService')
-  async getProductVariants({ id, params }: ListVariantByRelationInput) {
+  async ListProductVariants({ id, params }: ListVariantByRelationInput) {
     return await this.service.listProductVariants(id, params);
   }
 

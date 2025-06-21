@@ -24,13 +24,13 @@ export class ProductController {
   }
 
   @GrpcMethod('ProductService')
-  getStoreProducts({ id, data }: ListProductByRelationInput) {
-    return this.service.listStoreProducts(id, data);
+  listStoreProducts({ id, params }: ListProductByRelationInput) {
+    return this.service.listStoreProducts(id, params);
   }
 
   @GrpcMethod('ProductService')
-  getCategoryProducts({ id, data }: ListProductByRelationInput) {
-    return this.service.listProductsByCategory(id, data);
+  listCategoryProducts({ id, params }: ListProductByRelationInput) {
+    return this.service.listProductsByCategory(id, params);
   }
 
   @GrpcMethod('ProductService')
